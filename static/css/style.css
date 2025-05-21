@@ -1,0 +1,44 @@
+/* Base font */
+body, input, select, button, textarea {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Sidebar styling */
+aside {
+  background: var(--bs-light);
+}
+#search-input {
+  font-size: 0.9rem;
+}
+#addr-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Popup styling */
+.leaflet-popup-content label {
+  font-weight: 500;
+  margin-top: 0.5em;
+  display: block;
+}
+.leaflet-popup-content input,
+.leaflet-popup-content select,
+.leaflet-popup-content textarea {
+  width: 100%;
+  margin-bottom: 0.5em;
+}
+
+/* Dark mode overrides */
+body.dark {
+  --bs-body-bg: #2e2e2e;
+  --bs-body-color: #eee;
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+body.dark .navbar { background: #444 !important; }
+body.dark aside { background: #333; }
+body.dark .list-group-item {
+  background: #2e2e2e;
+  color: #eee;
+  border-color: #444;
+}

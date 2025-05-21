@@ -1,0 +1,5 @@
+Flask
+Flask-Cors
+SQLAlchemy
+geopy
+psycopg2-binary

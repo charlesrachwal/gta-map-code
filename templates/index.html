@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>GTA Window Cleaning Tracker</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <!-- Leaflet & plugins CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css"/>
+
+  <!-- Flatpickr -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/>
+
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body class="d-flex flex-column vh-100">
+
+  <nav class="navbar navbar-light bg-light px-3">
+    <span class="navbar-brand mb-0 h1">
+      <i class="fa fa-window-maximize text-primary me-2"></i>
+      Window Cleaning Tracker
+    </span>
+    <button id="toggle-dark" class="btn btn-outline-secondary">
+      <i class="fa fa-moon"></i> Dark
+    </button>
+  </nav>
+
+  <div class="container-fluid flex-grow-1 p-0">
+    <div class="row g-0 h-100">
+
+      <aside class="col-3 border-end d-flex flex-column">
+        <div class="p-3 overflow-auto flex-grow-1">
+          <div class="mb-3">
+            <input id="search-input" type="text" class="form-control" placeholder="🔍 Search saved…">
+          </div>
+
+          <!-- Autocomplete + Search/Add -->
+          <div class="input-group mb-2">
+            <input id="addr-input"
+                   list="addr-suggestions"
+                   type="text"
+                   class="form-control"
+                   placeholder="Enter address…">
+            <datalist id="addr-suggestions"></datalist>
+            <button id="search-btn" class="btn btn-outline-secondary" title="Preview on map">
+              <i class="fa fa-search"></i>
+            </button>
+            <button id="add-btn" class="btn btn-primary" title="Save to list">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+          <select id="status-select" class="form-select mb-4">
+            <option>Not contacted</option>
+            <option>Contacted</option>
+            <option>Interested</option>
+            <option>Not interested</option>
+            <option>Job scheduled</option>
+            <option>Job completed</option>
+          </select>
+
+          <button id="route-pending" class="btn btn-outline-success w-100 mb-4">
+            <i class="fa fa-route me-1"></i> Route Pending Jobs
+          </button>
+
+          <h6><i class="fa fa-filter me-2"></i>Filter by Status</h6>
+          <div class="row row-cols-2 gx-2 mb-4">
+            <div class="form-check">
+              <input class="form-check-input filter-checkbox" type="checkbox" value="Not contacted" id="f-not-contacted" checked>
+              <label class="form-check-label" for="f-not-contacted">Not contacted</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input filter-checkbox" type="checkbox" value="Contacted" id="f-contacted" checked>
+              <label class="form-check-label" for="f-contacted">Contacted</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input filter-checkbox" type="checkbox" value="Interested" id="f-interested" checked>
+              <label class="form-check-label" for="f-interested">Interested</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input filter-checkbox" type="checkbox" value="Not interested" id="f-not-interested" checked>
+              <label class="form-check-label" for="f-not-interested">Not interested</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input filter-checkbox" type="checkbox" value="Job scheduled" id="f-scheduled" checked>
+              <label class="form-check-label" for="f-scheduled">Job scheduled</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input filter-checkbox" type="checkbox" value="Job completed" id="f-completed" checked>
+              <label class="form-check-label" for="f-completed">Job completed</label>
+            </div>
+          </div>
+
+          <hr/>
+          <h6><i class="fa fa-list me-2"></i>Saved Addresses</h6>
+          <ul id="addr-list" class="list-group list-group-flush"></ul>
+        </div>
+      </aside>
+
+      <main class="col-9 position-relative">
+        <div id="map" class="h-100"></div>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+  <!-- Turf.js for centroid calculations -->
+  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="/static/js/main.js"></script>
+</body>
+</html>

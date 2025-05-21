@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gta
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  web:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/gta
+      FLASK_APP: app.py
+      FLASK_ENV: development
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
+volumes:
+  db-data:
