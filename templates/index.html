@@ -3,7 +3,10 @@
 <head>
   <meta charset="utf-8"/>
   <title>GTA Window Cleaning Tracker</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Window Tracker">
 
   <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
@@ -27,91 +30,229 @@
 </head>
 <body class="d-flex flex-column vh-100">
 
-  <nav class="navbar navbar-light bg-light px-3">
-    <span class="navbar-brand mb-0 h1">
-      <i class="fa fa-window-maximize text-primary me-2"></i>
-      Window Cleaning Tracker
-    </span>
-    <button id="toggle-dark" class="btn btn-outline-secondary">
-      <i class="fa fa-moon"></i> Dark
-    </button>
-  </nav>
+  <!-- Desktop Interface -->
+  <div id="desktop-interface">
+    <nav class="navbar navbar-light bg-light px-3">
+      <span class="navbar-brand mb-0 h1">
+        <i class="fa fa-window-maximize text-primary me-2"></i>
+        Window Cleaning Tracker
+      </span>
+      <button id="toggle-dark" class="btn btn-outline-secondary">
+        <i class="fa fa-moon"></i> Dark
+      </button>
+    </nav>
 
-  <div class="container-fluid flex-grow-1 p-0">
-    <div class="row g-0 h-100">
+    <div class="container-fluid flex-grow-1 p-0">
+      <div class="row g-0 h-100">
 
-      <aside class="col-3 border-end d-flex flex-column">
-        <div class="p-3 overflow-auto flex-grow-1">
-          <div class="mb-3">
-            <input id="search-input" type="text" class="form-control" placeholder="🔍 Search saved…">
-          </div>
+        <aside class="col-3 border-end d-flex flex-column">
+          <div class="p-3 overflow-auto flex-grow-1">
+            <div class="mb-3">
+              <input id="search-input" type="text" class="form-control" placeholder="🔍 Search saved…">
+            </div>
 
-          <!-- Autocomplete + Search/Add -->
-          <div class="input-group mb-2">
-            <input id="addr-input"
-                   list="addr-suggestions"
-                   type="text"
-                   class="form-control"
-                   placeholder="Enter address…">
-            <datalist id="addr-suggestions"></datalist>
-            <button id="search-btn" class="btn btn-outline-secondary" title="Preview on map">
-              <i class="fa fa-search"></i>
+            <!-- Autocomplete + Search/Add -->
+            <div class="input-group mb-2">
+              <input id="addr-input"
+                     list="addr-suggestions"
+                     type="text"
+                     class="form-control"
+                     placeholder="Enter address…">
+              <datalist id="addr-suggestions"></datalist>
+              <button id="search-btn" class="btn btn-outline-secondary" title="Preview on map">
+                <i class="fa fa-search"></i>
+              </button>
+              <button id="add-btn" class="btn btn-primary" title="Save to list">
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+            <select id="status-select" class="form-select mb-4">
+              <option>Not contacted</option>
+              <option>Contacted</option>
+              <option>Interested</option>
+              <option>Not interested</option>
+              <option>Job scheduled</option>
+              <option>Job completed</option>
+            </select>
+
+            <button id="route-pending" class="btn btn-outline-success w-100 mb-4">
+              <i class="fa fa-route me-1"></i> Route Pending Jobs
             </button>
-            <button id="add-btn" class="btn btn-primary" title="Save to list">
-              <i class="fa fa-plus"></i>
-            </button>
-          </div>
-          <select id="status-select" class="form-select mb-4">
-            <option>Not contacted</option>
-            <option>Contacted</option>
-            <option>Interested</option>
-            <option>Not interested</option>
-            <option>Job scheduled</option>
-            <option>Job completed</option>
-          </select>
 
-          <button id="route-pending" class="btn btn-outline-success w-100 mb-4">
-            <i class="fa fa-route me-1"></i> Route Pending Jobs
+            <h6><i class="fa fa-filter me-2"></i>Filter by Status</h6>
+            <div class="row row-cols-2 gx-2 mb-4">
+              <div class="form-check">
+                <input class="form-check-input filter-checkbox" type="checkbox" value="Not contacted" id="f-not-contacted" checked>
+                <label class="form-check-label" for="f-not-contacted">Not contacted</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input filter-checkbox" type="checkbox" value="Contacted" id="f-contacted" checked>
+                <label class="form-check-label" for="f-contacted">Contacted</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input filter-checkbox" type="checkbox" value="Interested" id="f-interested" checked>
+                <label class="form-check-label" for="f-interested">Interested</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input filter-checkbox" type="checkbox" value="Not interested" id="f-not-interested" checked>
+                <label class="form-check-label" for="f-not-interested">Not interested</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input filter-checkbox" type="checkbox" value="Job scheduled" id="f-scheduled" checked>
+                <label class="form-check-label" for="f-scheduled">Job scheduled</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input filter-checkbox" type="checkbox" value="Job completed" id="f-completed" checked>
+                <label class="form-check-label" for="f-completed">Job completed</label>
+              </div>
+            </div>
+
+            <hr/>
+            <h6><i class="fa fa-list me-2"></i>Saved Addresses</h6>
+            <ul id="addr-list" class="list-group list-group-flush"></ul>
+          </div>
+        </aside>
+
+        <main class="col-9 position-relative">
+          <div id="map" class="h-100"></div>
+        </main>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Interface -->
+  <div id="mobile-interface" style="display: none;">
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+      <span class="mobile-title">
+        <i class="fa fa-window-maximize text-primary me-2"></i>
+        Window Tracker
+      </span>
+      <button id="mobile-toggle-dark" class="btn btn-outline-secondary btn-sm">
+        <i class="fa fa-moon"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Map Container -->
+    <div class="mobile-map-container">
+      <div id="mobile-map" class="h-100"></div>
+      
+      <!-- Add Mode Indicator -->
+      <div id="add-mode-indicator" class="add-mode-indicator" style="display: none;">
+        <i class="fa fa-crosshairs me-2"></i>
+        Tap anywhere to add location
+        <button id="cancel-add-mode" class="btn btn-sm btn-danger ms-2">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+
+
+<!-- Mobile Bottom Navigation - ONLY 3 TABS NOW -->
+<div class="mobile-bottom-nav">
+  <button id="mobile-tab-map" class="mobile-tab active">
+    <i class="fa fa-map"></i>
+    <span>Map</span>
+  </button>
+  <button id="mobile-tab-list" class="mobile-tab">
+    <i class="fa fa-list"></i>
+    <span>List</span>
+  </button>
+  <button id="mobile-tab-more" class="mobile-tab">
+    <i class="fa fa-ellipsis-h"></i>
+    <span>More</span>
+  </button>
+</div>
+
+
+
+    <!-- Mobile Address List Drawer -->
+    <div id="mobile-list-drawer" class="mobile-drawer">
+      <div class="mobile-drawer-handle"></div>
+      <div class="mobile-drawer-content">
+        <div class="mobile-drawer-header">
+          <h5>Saved Locations</h5>
+          <button id="mobile-close-drawer" class="btn btn-sm btn-outline-secondary">
+            <i class="fa fa-times"></i>
           </button>
-
-          <h6><i class="fa fa-filter me-2"></i>Filter by Status</h6>
-          <div class="row row-cols-2 gx-2 mb-4">
-            <div class="form-check">
-              <input class="form-check-input filter-checkbox" type="checkbox" value="Not contacted" id="f-not-contacted" checked>
-              <label class="form-check-label" for="f-not-contacted">Not contacted</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input filter-checkbox" type="checkbox" value="Contacted" id="f-contacted" checked>
-              <label class="form-check-label" for="f-contacted">Contacted</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input filter-checkbox" type="checkbox" value="Interested" id="f-interested" checked>
-              <label class="form-check-label" for="f-interested">Interested</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input filter-checkbox" type="checkbox" value="Not interested" id="f-not-interested" checked>
-              <label class="form-check-label" for="f-not-interested">Not interested</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input filter-checkbox" type="checkbox" value="Job scheduled" id="f-scheduled" checked>
-              <label class="form-check-label" for="f-scheduled">Job scheduled</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input filter-checkbox" type="checkbox" value="Job completed" id="f-completed" checked>
-              <label class="form-check-label" for="f-completed">Job completed</label>
-            </div>
-          </div>
-
-          <hr/>
-          <h6><i class="fa fa-list me-2"></i>Saved Addresses</h6>
-          <ul id="addr-list" class="list-group list-group-flush"></ul>
         </div>
-      </aside>
+        
+        <!-- Mobile Search -->
+        <div class="mb-3">
+          <input id="mobile-search-input" type="text" class="form-control" placeholder="🔍 Search locations…">
+        </div>
 
-      <main class="col-9 position-relative">
-        <div id="map" class="h-100"></div>
-      </main>
+        <!-- Mobile Status Filter -->
+        <div class="mobile-filter-section mb-3">
+          <div class="mobile-filter-pills">
+            <button class="mobile-filter-pill active" data-status="all">All</button>
+            <button class="mobile-filter-pill" data-status="Not contacted">New</button>
+            <button class="mobile-filter-pill" data-status="Contacted">Called</button>
+            <button class="mobile-filter-pill" data-status="Interested">Interested</button>
+            <button class="mobile-filter-pill" data-status="Job scheduled">Scheduled</button>
+          </div>
+        </div>
 
+        <!-- Mobile Address List -->
+        <div id="mobile-addr-list" class="mobile-address-list"></div>
+      </div>
+    </div>
+
+    <!-- Mobile More Options Drawer -->
+    <div id="mobile-more-drawer" class="mobile-drawer">
+      <div class="mobile-drawer-handle"></div>
+      <div class="mobile-drawer-content">
+        <div class="mobile-drawer-header">
+          <h5>Options</h5>
+          <button id="mobile-close-more-drawer" class="btn btn-sm btn-outline-secondary">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+        
+        <div class="mobile-options-list">
+          <button id="mobile-route-pending" class="mobile-option-item">
+            <i class="fa fa-route text-success"></i>
+            <div>
+              <div class="mobile-option-title">Plan Route</div>
+              <div class="mobile-option-desc">Route through pending jobs</div>
+            </div>
+          </button>
+          
+          <button id="mobile-toggle-satellite" class="mobile-option-item">
+            <i class="fa fa-satellite text-info"></i>
+            <div>
+              <div class="mobile-option-title">Satellite View</div>
+              <div class="mobile-option-desc">Toggle map view</div>
+            </div>
+          </button>
+          
+          <button id="mobile-locate-me" class="mobile-option-item">
+            <i class="fa fa-location-arrow text-primary"></i>
+            <div>
+              <div class="mobile-option-title">Find Me</div>
+              <div class="mobile-option-desc">Center map on location</div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Status Selector (for new addresses) -->
+    <div id="mobile-status-selector" class="mobile-status-selector" style="display: none;">
+      <div class="mobile-status-content">
+        <h6>Set Status</h6>
+        <div class="mobile-status-pills">
+          <button class="mobile-status-pill active" data-status="Not contacted">Not contacted</button>
+          <button class="mobile-status-pill" data-status="Contacted">Contacted</button>
+          <button class="mobile-status-pill" data-status="Interested">Interested</button>
+        </div>
+        <div class="mobile-status-actions">
+          <button id="mobile-cancel-status" class="btn btn-outline-secondary">Cancel</button>
+          <button id="mobile-confirm-status" class="btn btn-primary">Add Location</button>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -3,13 +3,15 @@ body, input, select, button, textarea {
   font-family: 'Roboto', sans-serif;
 }
 
-/* Sidebar styling */
+/* Desktop sidebar styling */
 aside {
   background: var(--bs-light);
 }
+
 #search-input {
   font-size: 0.9rem;
 }
+
 #addr-list {
   max-height: 300px;
   overflow-y: auto;
@@ -21,6 +23,7 @@ aside {
   margin-top: 0.5em;
   display: block;
 }
+
 .leaflet-popup-content input,
 .leaflet-popup-content select,
 .leaflet-popup-content textarea {
@@ -35,10 +38,946 @@ body.dark {
   background: var(--bs-body-bg);
   color: var(--bs-body-color);
 }
-body.dark .navbar { background: #444 !important; }
-body.dark aside { background: #333; }
+
+body.dark .navbar { 
+  background: #444 !important; 
+}
+
+body.dark aside { 
+  background: #333; 
+}
+
 body.dark .list-group-item {
   background: #2e2e2e;
   color: #eee;
   border-color: #444;
+}
+
+/* ========== MOBILE INTERFACE STYLES ========== */
+
+/* Mobile Detection - Hide appropriate interface */
+@media (max-width: 768px) {
+  #desktop-interface {
+    display: none !important;
+  }
+  
+  #mobile-interface {
+    display: flex !important;
+    flex-direction: column;
+    height: 100vh;
+  }
+}
+
+/* Mobile Header */
+.mobile-header {
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  position: relative;
+  z-index: 1000;
+}
+
+.mobile-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+body.dark .mobile-header {
+  background: #444;
+  border-bottom-color: #555;
+}
+
+body.dark .mobile-title {
+  color: #eee;
+}
+
+/* Mobile Map Container */
+.mobile-map-container {
+  flex-grow: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+#mobile-map {
+  width: 100%;
+  height: 100%;
+}
+
+/* Add Mode Indicator */
+.add-mode-indicator {
+  position: absolute;
+  top: 20px;
+  left: 16px;
+  right: 16px;
+  background: rgba(40, 167, 69, 0.95);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 500;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* Mobile Bottom Navigation */
+.mobile-bottom-nav {
+  background: #fff;
+  border-top: 1px solid #e0e0e0;
+  padding: 8px 0;
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+  z-index: 1000;
+  height: 70px;
+  /* iOS safe area */
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+}
+
+.mobile-tab {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  min-width: 60px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-tab i {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.mobile-tab.active {
+  color: #007bff;
+  background: rgba(0, 123, 255, 0.1);
+}
+
+.mobile-tab:active {
+  transform: scale(0.95);
+}
+
+body.dark .mobile-bottom-nav {
+  background: #444;
+  border-top-color: #555;
+}
+
+body.dark .mobile-tab {
+  color: #aaa;
+}
+
+body.dark .mobile-tab.active {
+  color: #5bc0de;
+  background: rgba(91, 192, 222, 0.2);
+}
+
+/* Mobile Drawers */
+.mobile-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  z-index: 1100;
+  max-height: 80vh;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+  /* iOS safe area */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.mobile-drawer.show {
+  transform: translateY(0);
+}
+
+.mobile-drawer-handle {
+  width: 40px;
+  height: 4px;
+  background: #ddd;
+  border-radius: 2px;
+  margin: 12px auto 0;
+}
+
+.mobile-drawer-content {
+  padding: 16px 20px 20px;
+  overflow-y: auto;
+  max-height: calc(80vh - 40px);
+}
+
+.mobile-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.mobile-drawer-header h5 {
+  margin: 0;
+  font-weight: 600;
+}
+
+body.dark .mobile-drawer {
+  background: #333;
+}
+
+body.dark .mobile-drawer-handle {
+  background: #555;
+}
+
+body.dark .mobile-drawer-header {
+  border-bottom-color: #444;
+}
+
+/* Mobile Address List */
+.mobile-address-list {
+  max-height: 400px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-address-item {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-address-item:active {
+  transform: scale(0.98);
+  background: #e9ecef;
+}
+
+.mobile-address-info {
+  flex-grow: 1;
+}
+
+.mobile-address-text {
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.mobile-address-status {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.mobile-address-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.mobile-action-btn {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px;
+  color: #666;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-action-btn:active {
+  background: #f0f0f0;
+}
+
+/* Status Colors */
+.status-not-contacted { background: #6c757d; color: white; }
+.status-contacted { background: #fd7e14; color: white; }
+.status-interested { background: #198754; color: white; }
+.status-not-interested { background: #dc3545; color: white; }
+.status-job-scheduled { background: #ffc107; color: black; }
+.status-job-completed { background: #0dcaf0; color: black; }
+
+body.dark .mobile-address-item {
+  background: #444;
+  border-color: #555;
+}
+
+body.dark .mobile-address-item:active {
+  background: #555;
+}
+
+body.dark .mobile-address-text {
+  color: #eee;
+}
+
+body.dark .mobile-action-btn {
+  border-color: #555;
+  color: #aaa;
+}
+
+body.dark .mobile-action-btn:active {
+  background: #555;
+}
+
+/* Mobile Filter Pills */
+.mobile-filter-section {
+  margin-bottom: 16px;
+}
+
+.mobile-filter-pills {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-filter-pill {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-filter-pill.active {
+  background: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.mobile-filter-pill:active {
+  transform: scale(0.95);
+}
+
+body.dark .mobile-filter-pill {
+  background: #444;
+  border-color: #555;
+  color: #aaa;
+}
+
+body.dark .mobile-filter-pill.active {
+  background: #5bc0de;
+  border-color: #5bc0de;
+  color: #333;
+}
+
+/* Mobile Options List */
+.mobile-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mobile-option-item {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-option-item:active {
+  transform: scale(0.98);
+  background: #e9ecef;
+}
+
+.mobile-option-item i {
+  font-size: 20px;
+  width: 24px;
+  text-align: center;
+}
+
+.mobile-option-title {
+  font-weight: 500;
+  margin-bottom: 2px;
+  color: #333;
+}
+
+.mobile-option-desc {
+  font-size: 12px;
+  color: #666;
+}
+
+body.dark .mobile-option-item {
+  background: #444;
+  border-color: #555;
+}
+
+body.dark .mobile-option-item:active {
+  background: #555;
+}
+
+body.dark .mobile-option-title {
+  color: #eee;
+}
+
+body.dark .mobile-option-desc {
+  color: #aaa;
+}
+
+/* Mobile Status Selector */
+.mobile-status-selector {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1200;
+  display: flex;
+  align-items: flex-end;
+  padding: 16px;
+  /* iOS safe area */
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+.mobile-status-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  width: 100%;
+}
+
+.mobile-status-content h6 {
+  margin-bottom: 16px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.mobile-status-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.mobile-status-pill {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 12px 16px;
+  text-align: left;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-status-pill.active {
+  background: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.mobile-status-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.mobile-status-actions .btn {
+  flex: 1;
+  padding: 12px;
+  font-weight: 500;
+}
+
+body.dark .mobile-status-content {
+  background: #333;
+}
+
+body.dark .mobile-status-pill {
+  background: #444;
+  border-color: #555;
+  color: #aaa;
+}
+
+body.dark .mobile-status-pill.active {
+  background: #5bc0de;
+  border-color: #5bc0de;
+  color: #333;
+}
+
+/* Mobile Form Controls */
+@media (max-width: 768px) {
+  /* Prevent zoom on form inputs */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+  
+  /* Larger touch targets */
+  .btn {
+    min-height: 44px;
+    padding: 12px 16px;
+  }
+  
+  .btn-sm {
+    min-height: 36px;
+    padding: 8px 12px;
+  }
+  
+  /* Mobile popup adjustments */
+  .leaflet-popup-content {
+    margin: 16px 20px;
+    min-width: 280px;
+  }
+  
+  .leaflet-popup-content input,
+  .leaflet-popup-content select,
+  .leaflet-popup-content textarea {
+    font-size: 16px;
+    min-height: 44px;
+    padding: 12px;
+    border-radius: 6px;
+  }
+  
+  .leaflet-popup-content .btn {
+    min-height: 44px;
+    font-size: 16px;
+  }
+  
+  /* Larger close button */
+  .leaflet-popup-close-button {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    line-height: 28px;
+  }
+  
+  /* Leaflet controls bigger */
+  .leaflet-control-zoom a {
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+    font-size: 18px;
+  }
+  
+  .leaflet-control-locate a {
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+  }
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+  body {
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  /* Fix for iOS safe areas */
+  @media (max-width: 768px) {
+    .mobile-header {
+      padding-top: max(12px, env(safe-area-inset-top));
+    }
+    
+    .mobile-bottom-nav {
+      padding-bottom: max(8px, env(safe-area-inset-bottom));
+    }
+    
+    .mobile-drawer {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .mobile-status-selector {
+      padding-bottom: max(16px, env(safe-area-inset-bottom));
+    }
+  }
+  
+  /* Prevent text selection on mobile interactive elements */
+  .mobile-tab,
+  .mobile-address-item,
+  .mobile-option-item,
+  .mobile-filter-pill,
+  .mobile-status-pill,
+  .mobile-action-btn {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Better touch scrolling */
+  .mobile-drawer-content,
+  .mobile-address-list,
+  .mobile-filter-pills {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Prevent iOS bounce scroll where not needed */
+  .mobile-map-container {
+    -webkit-overflow-scrolling: auto;
+  }
+}
+
+/* Animations */
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.mobile-drawer.show {
+  animation: slideInUp 0.3s ease;
+}
+
+.mobile-status-selector {
+  animation: fadeIn 0.2s ease;
+}
+
+/* Custom scrollbar for drawers */
+.mobile-drawer-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.mobile-drawer-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mobile-drawer-content::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 2px;
+}
+
+body.dark .mobile-drawer-content::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+/* Haptic feedback simulation */
+.mobile-tab:active,
+.mobile-address-item:active,
+.mobile-option-item:active,
+.mobile-filter-pill:active,
+.mobile-status-pill:active {
+  transition: transform 0.1s ease;
+}
+
+/* Loading states */
+.mobile-loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.mobile-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+
+
+
+
+
+
+/* Safari-specific fixes - Add this to your existing CSS */
+
+/* Safari detection and bottom nav fix */
+@supports (-webkit-appearance: none) {
+  /* This targets Safari specifically */
+  
+  @media (max-width: 768px) {
+    /* Force bottom nav to show in Safari */
+    .mobile-bottom-nav {
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 1000 !important;
+      display: flex !important;
+      background: #fff !important;
+      border-top: 1px solid #e0e0e0 !important;
+      height: 70px !important;
+      padding: 8px 0 !important;
+      justify-content: space-around !important;
+      align-items: center !important;
+      /* Safari safe area */
+      padding-bottom: max(8px, env(safe-area-inset-bottom)) !important;
+    }
+    
+    /* Ensure mobile interface is properly displayed in Safari */
+    #mobile-interface {
+      display: flex !important;
+      flex-direction: column !important;
+      height: 100vh !important;
+      height: 100dvh !important; /* Safari dynamic viewport height */
+    }
+    
+    /* Adjust map container to account for bottom nav in Safari */
+    .mobile-map-container {
+      flex: 1 !important;
+      height: calc(100vh - 130px) !important; /* Account for header + bottom nav */
+      height: calc(100dvh - 130px) !important; /* Safari dynamic viewport height */
+      position: relative !important;
+      overflow: hidden !important;
+    }
+    
+    #mobile-map {
+      width: 100% !important;
+      height: 100% !important;
+    }
+    
+    /* Force mobile tabs to show properly in Safari */
+    .mobile-tab {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      color: #666 !important;
+      font-size: 12px !important;
+      padding: 8px 12px !important;
+      border-radius: 8px !important;
+      transition: all 0.2s ease !important;
+      min-width: 60px !important;
+      background: none !important;
+      border: none !important;
+      cursor: pointer !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+    
+    .mobile-tab i {
+      font-size: 20px !important;
+      margin-bottom: 4px !important;
+    }
+    
+    .mobile-tab.active {
+      color: #007bff !important;
+      background: rgba(0, 123, 255, 0.1) !important;
+    }
+    
+    /* Dark mode fix for Safari */
+    body.dark .mobile-bottom-nav {
+      background: #444 !important;
+      border-top-color: #555 !important;
+    }
+    
+    body.dark .mobile-tab {
+      color: #aaa !important;
+    }
+    
+    body.dark .mobile-tab.active {
+      color: #5bc0de !important;
+      background: rgba(91, 192, 222, 0.2) !important;
+    }
+    
+    /* Safari viewport height fixes */
+    .mobile-header {
+      height: 60px !important;
+      flex-shrink: 0 !important;
+    }
+    
+    /* Ensure proper stacking order in Safari */
+    .mobile-header {
+      z-index: 1001 !important;
+    }
+    
+    .mobile-bottom-nav {
+      z-index: 1000 !important;
+    }
+    
+    .mobile-drawer {
+      z-index: 1100 !important;
+    }
+    
+    .mobile-status-selector {
+      z-index: 1200 !important;
+    }
+  }
+}
+
+/* Additional Safari-specific viewport fixes */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 768px) {
+    /* Safari mobile viewport fix */
+    html, body {
+      height: 100% !important;
+      height: 100dvh !important;
+      overflow: hidden !important;
+    }
+    
+    #mobile-interface {
+      height: 100% !important;
+      height: 100dvh !important;
+    }
+    
+    /* Safari address bar compensation */
+    .mobile-map-container {
+      height: calc(100% - 130px) !important;
+      height: calc(100dvh - 130px) !important;
+    }
+  }
+}
+
+/* Debug styles to make bottom nav more visible in Safari */
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    /* Add a subtle shadow to make it more visible */
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
+    /* Ensure it's always on top */
+    position: fixed !important;
+    bottom: 0 !important;
+    width: 100% !important;
+  }
+  
+  /* Make tabs more prominent for debugging */
+  .mobile-tab {
+    border: 1px solid transparent !important;
+  }
+  
+  .mobile-tab:hover, .mobile-tab:active {
+    border-color: #007bff !important;
+    background: rgba(0, 123, 255, 0.1) !important;
+  }
+}
+
+
+
+
+
+
+
+/* Add this to your existing CSS to update the mobile bottom navigation for 3 tabs */
+
+.mobile-bottom-nav {
+  background: #fff;
+  border-top: 1px solid #e0e0e0;
+  padding: 8px 0;
+  display: flex;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 70px;
+  /* iOS safe area */
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.mobile-tab {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 12px;
+  padding: 8px 16px; /* Increased padding for better spacing with 3 tabs */
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  min-width: 80px; /* Increased width since we have more space */
+  flex: 1; /* Equal distribution of width */
+  max-width: 120px; /* Prevent tabs from getting too wide */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-tab i {
+  font-size: 22px; /* Slightly larger icons with more space */
+  margin-bottom: 4px;
+}
+
+.mobile-tab.active {
+  color: #007bff;
+  background: rgba(0, 123, 255, 0.1);
+}
+
+.mobile-tab:active {
+  transform: scale(0.95);
+}
+
+body.dark .mobile-bottom-nav {
+  background: #444;
+  border-top-color: #555;
+}
+
+body.dark .mobile-tab {
+  color: #aaa;
+}
+
+body.dark .mobile-tab.active {
+  color: #5bc0de;
+  background: rgba(91, 192, 222, 0.2);
+}
+
+/* Update Safari-specific fixes for 3-tab layout */
+@supports (-webkit-appearance: none) {
+  @media (max-width: 768px) {
+    .mobile-bottom-nav {
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 1000 !important;
+      display: flex !important;
+      background: #fff !important;
+      border-top: 1px solid #e0e0e0 !important;
+      height: 70px !important;
+      padding: 8px 0 !important;
+      justify-content: space-around !important;
+      align-items: center !important;
+      padding-bottom: max(8px, env(safe-area-inset-bottom)) !important;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
+    }
+    
+    .mobile-tab {
+      flex: 1 !important;
+      max-width: 120px !important;
+      min-width: 80px !important;
+      padding: 8px 16px !important;
+    }
+    
+    .mobile-tab i {
+      font-size: 22px !important;
+    }
+  }
 }
