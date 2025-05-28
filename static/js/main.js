@@ -404,13 +404,14 @@ function applyFilters() {
 let mobileCurrentFilter = 'all';
 let pendingLocation = null;
 
+
 function initMobileInterface() {
   // Initialize mobile map
   const street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19});
-  const satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y}{y}&z={z}',{
-    maxZoom:19, subdomains:['mt0','mt1','mt2','mt3']
-  });
-  
+  const satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+  maxZoom:19, 
+  subdomains:['mt0','mt1','mt2','mt3']
+});
   map = L.map('mobile-map', {
     center: [43.6532, -79.3832],
     zoom: 11,
@@ -435,6 +436,7 @@ function initMobileInterface() {
   // Initialize mobile-specific features
   initMobileEventHandlers();
   initMobileMapClickHandler();
+  initMobileSearch(); // ADD THIS LINE
   
   // Initialize Flatpickr on popup open
   map.on('popupopen', e => {
@@ -861,3 +863,175 @@ window.addEventListener('orientationchange', () => {
     }, 100);
   }, 500);
 });
+
+
+
+
+// Add these functions to your mobile interface section in main.js
+
+// Mobile search functionality
+let mobileSearchResults = [];
+let mobileSearchTimeout = null;
+
+function initMobileSearch() {
+  const searchInput = document.getElementById('mobile-map-search');
+  const searchBtn = document.getElementById('mobile-search-btn');
+  const clearBtn = document.getElementById('mobile-search-clear');
+  
+  if (!searchInput || !searchBtn || !clearBtn) {
+    console.log('Mobile search elements not found');
+    return;
+  }
+
+  // Create search results container
+  const resultsContainer = document.createElement('div');
+  resultsContainer.className = 'mobile-search-results';
+  resultsContainer.id = 'mobile-search-results';
+  document.querySelector('.mobile-search-bar').appendChild(resultsContainer);
+
+  // Search input handler with debounce
+  searchInput.addEventListener('input', (e) => {
+    const query = e.target.value.trim();
+    
+    if (mobileSearchTimeout) {
+      clearTimeout(mobileSearchTimeout);
+    }
+    
+    if (query.length >= 3) {
+      clearBtn.style.display = 'block';
+      mobileSearchTimeout = setTimeout(() => {
+        performMobileSearch(query);
+      }, 300);
+    } else {
+      hideSearchResults();
+      clearBtn.style.display = 'none';
+    }
+  });
+
+  // Search button handler
+  searchBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const query = searchInput.value.trim();
+    if (query) {
+      performMobileSearch(query);
+    }
+  });
+
+  // Fallback click handler
+  searchBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const query = searchInput.value.trim();
+    if (query) {
+      performMobileSearch(query);
+    }
+  });
+
+  // Clear button handler
+  clearBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    clearMobileSearch();
+  });
+
+  clearBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    clearMobileSearch();
+  });
+
+  // Hide results when clicking outside
+  document.addEventListener('touchend', (e) => {
+    if (!e.target.closest('.mobile-search-bar')) {
+      hideSearchResults();
+    }
+  });
+}
+
+function performMobileSearch(query) {
+  console.log('Searching for:', query);
+  
+  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(query + ', Toronto, Canada')}`;
+  
+  fetch(url)
+    .then(r => r.json())
+    .then(results => {
+      mobileSearchResults = results;
+      displaySearchResults(results);
+    })
+    .catch(err => {
+      console.error('Search error:', err);
+      hideSearchResults();
+    });
+}
+
+function displaySearchResults(results) {
+  const container = document.getElementById('mobile-search-results');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  if (results.length === 0) {
+    container.innerHTML = '<div class="mobile-search-result">No results found</div>';
+    container.style.display = 'block';
+    return;
+  }
+
+  results.forEach((result, index) => {
+    const item = document.createElement('div');
+    item.className = 'mobile-search-result';
+    item.textContent = result.display_name;
+    item.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      selectSearchResult(result);
+    });
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      selectSearchResult(result);
+    });
+    container.appendChild(item);
+  });
+
+  container.style.display = 'block';
+}
+
+function selectSearchResult(result) {
+  const lat = parseFloat(result.lat);
+  const lng = parseFloat(result.lon);
+  
+  // Center map on the selected location
+  map.setView([lat, lng], 16);
+  
+  // Show a temporary popup
+  const popup = L.popup()
+    .setLatLng([lat, lng])
+    .setContent(`<strong>${result.display_name}</strong><br><small>Tap anywhere to add a location</small>`)
+    .openOn(map);
+
+  // Clear search
+  clearMobileSearch();
+  
+  console.log('Selected location:', result.display_name);
+}
+
+function clearMobileSearch() {
+  const searchInput = document.getElementById('mobile-map-search');
+  const clearBtn = document.getElementById('mobile-search-clear');
+  
+  if (searchInput) searchInput.value = '';
+  if (clearBtn) clearBtn.style.display = 'none';
+  
+  hideSearchResults();
+}
+
+function hideSearchResults() {
+  const container = document.getElementById('mobile-search-results');
+  if (container) {
+    container.style.display = 'none';
+    container.innerHTML = '';
+  }
+}
+
+// Update your initMobileInterface function to include search initialization
+// Add this line after initMobileMapClickHandler():
+// initMobileSearch();

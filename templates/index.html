@@ -123,16 +123,35 @@
 
   <!-- Mobile Interface -->
   <div id="mobile-interface" style="display: none;">
-    <!-- Mobile Header -->
-    <div class="mobile-header">
-      <span class="mobile-title">
-        <i class="fa fa-window-maximize text-primary me-2"></i>
-        Window Tracker
-      </span>
-      <button id="mobile-toggle-dark" class="btn btn-outline-secondary btn-sm">
-        <i class="fa fa-moon"></i>
-      </button>
-    </div>
+    
+    <!-- Add this search bar to your mobile interface, right after the mobile-header -->
+<!-- Mobile Header -->
+<div class="mobile-header">
+  <span class="mobile-title">
+    <i class="fa fa-window-maximize text-primary me-2"></i>
+    Window Tracker
+  </span>
+  <button id="mobile-toggle-dark" class="btn btn-outline-secondary btn-sm">
+    <i class="fa fa-moon"></i>
+  </button>
+</div>
+
+<!-- NEW: Mobile Search Bar -->
+<div class="mobile-search-bar">
+  <div class="mobile-search-container">
+    <input id="mobile-map-search" type="text" class="mobile-search-input" placeholder="🔍 Search address on map...">
+    <button id="mobile-search-btn" class="mobile-search-button">
+      <i class="fa fa-search"></i>
+    </button>
+    <button id="mobile-search-clear" class="mobile-search-clear" style="display: none;">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Continue with existing mobile-map-container... -->
+
+
 
     <!-- Mobile Map Container -->
     <div class="mobile-map-container">

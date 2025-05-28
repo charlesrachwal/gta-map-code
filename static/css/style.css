@@ -981,3 +981,169 @@ body.dark .mobile-tab.active {
     }
   }
 }
+
+
+
+/* Add this CSS for the mobile search functionality */
+
+/* Mobile Search Bar */
+.mobile-search-bar {
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 12px 16px;
+  position: relative;
+  z-index: 999;
+}
+
+.mobile-search-container {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mobile-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 12px 16px;
+  font-size: 16px;
+  outline: none;
+  color: #333;
+}
+
+.mobile-search-input::placeholder {
+  color: #6c757d;
+}
+
+.mobile-search-button {
+  background: #007bff;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-search-button:active {
+  background: #0056b3;
+}
+
+.mobile-search-clear {
+  background: #6c757d;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-search-clear:active {
+  background: #5a6268;
+}
+
+/* Dark mode for mobile search */
+body.dark .mobile-search-bar {
+  background: #444;
+  border-bottom-color: #555;
+}
+
+body.dark .mobile-search-container {
+  background: #333;
+  border-color: #555;
+}
+
+body.dark .mobile-search-input {
+  color: #eee;
+}
+
+body.dark .mobile-search-input::placeholder {
+  color: #aaa;
+}
+
+body.dark .mobile-search-button {
+  background: #5bc0de;
+}
+
+body.dark .mobile-search-button:active {
+  background: #46b8da;
+}
+
+/* Update mobile map container to account for search bar */
+@media (max-width: 768px) {
+  .mobile-map-container {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+    height: calc(100vh - 190px); /* Account for header + search + bottom nav */
+  }
+}
+
+/* Safari-specific adjustments */
+@supports (-webkit-appearance: none) {
+  @media (max-width: 768px) {
+    .mobile-map-container {
+      height: calc(100vh - 190px) !important;
+      height: calc(100dvh - 190px) !important;
+    }
+    
+    .mobile-search-bar {
+      position: relative !important;
+      z-index: 999 !important;
+    }
+  }
+}
+
+/* Responsive search results popup */
+.mobile-search-results {
+  position: absolute;
+  top: 100%;
+  left: 16px;
+  right: 16px;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0 0 8px 8px;
+  border-top: none;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  display: none;
+}
+
+.mobile-search-result {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-search-result:last-child {
+  border-bottom: none;
+}
+
+.mobile-search-result:active {
+  background: #f8f9fa;
+}
+
+body.dark .mobile-search-results {
+  background: #333;
+  border-color: #555;
+}
+
+body.dark .mobile-search-result {
+  color: #eee;
+  border-bottom-color: #444;
+}
+
+body.dark .mobile-search-result:active {
+  background: #444;
+}
